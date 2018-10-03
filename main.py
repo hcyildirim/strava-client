@@ -1,4 +1,6 @@
 from flask import Flask, jsonify
+from collections import Counter
+import itertools
 import requests
 
 app = Flask(__name__)
@@ -23,4 +25,7 @@ def hello():
             'https://www.strava.com/api/v3/segments/%s/leaderboard' % (i['id']), headers=headers)
         leaderboards.append(segment_leaderboards_response.json()['entries'])
 
-    return jsonify(leaderboards)
+    athletes = Counter(k['athlete_name']
+                       for k in list(itertools.chain(*leaderboards)) if k.get('athlete_name'))
+
+    return jsonify(athletes.most_common())
