@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from collections import Counter
 import itertools
+from itertools import dropwhile
 import requests
 
 app = Flask(__name__)
@@ -28,4 +29,7 @@ def hello():
     athletes = Counter(k['athlete_name']
                        for k in list(itertools.chain(*leaderboards)) if k.get('athlete_name'))
 
-    return jsonify(athletes.most_common())
+    for key in dropwhile(lambda key_count: key_count[1] >= 2, athletes.most_common()):
+        del athletes[key]
+
+    return jsonify(athletes)
