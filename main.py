@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 
 @app.route("/leaderboards")
-def hello():
+def get_leaderboards():
     auth_token = '75c8c67777c2483cefe219c07ab7f46b4fda3d79'
     headers = {'Authorization': 'Bearer ' + auth_token}
 
